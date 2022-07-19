@@ -5,4 +5,6 @@ class Figure:
         self.perimeter: float
 
     def add_area(self, figure):
+        if not isinstance(figure, Figure):
+            raise ValueError('Make sure you pass a figure to add area')
         return self.area + figure.area
