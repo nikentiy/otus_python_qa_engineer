@@ -15,7 +15,12 @@ def read_books_file(path: str) -> list:
 
 def read_users_file(path: str) -> list:
     with open(path, "r") as f:
-        return json.loads(f.read())
+        raw_users = json.loads(f.read())
+    users = []
+    for user in raw_users:
+        users.append({k: v for k, v in user.items() if k in ['name', 'gender',
+                                                             'address', 'age']})
+    return users
 
 
 def write_library(path: str, data: list):
