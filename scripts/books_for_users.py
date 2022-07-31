@@ -5,11 +5,14 @@ import json
 
 def read_books_file(path: str) -> list:
     books = []
+    keys = []
     with open(path, newline='') as f:
         reader = csv.reader(f)
         header = next(reader)
+        for item in header[: -1]:
+            keys.append(item.lower())
         for row in reader:
-            books.append(dict(zip(header, row)))
+            books.append(dict(zip(keys, row[: -1])))
     return books
 
 
