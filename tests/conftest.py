@@ -2,6 +2,7 @@ import pytest
 
 from src.circle import Circle
 from src.dog_api_client import DogApiClient
+from src.openbrewerydb_api_client import OpenBreweryDBClient
 from src.rectangle import Rectangle
 from src.square import Square
 from src.triangle import Triangle
@@ -30,3 +31,8 @@ def circle():
 @pytest.fixture(scope='class')
 def dog_client():
     return DogApiClient()
+
+
+@pytest.fixture(scope='class')
+def openbrewerydb_client():
+    return OpenBreweryDBClient()
