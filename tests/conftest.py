@@ -1,6 +1,7 @@
 import pytest
 
 from src.circle import Circle
+from src.dog_api_client import DogApiClient
 from src.rectangle import Rectangle
 from src.square import Square
 from src.triangle import Triangle
@@ -24,3 +25,8 @@ def square():
 @pytest.fixture(scope='class')
 def circle():
     return Circle(9.1)
+
+
+@pytest.fixture(scope='class')
+def dog_client():
+    return DogApiClient()
