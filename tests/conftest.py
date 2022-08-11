@@ -9,6 +9,15 @@ from src.square import Square
 from src.triangle import Triangle
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--url", action="store", default="https://ya.ru", type=str, help="url to make a request"
+    )
+    parser.addoption(
+        "--status_code", action="store", default=200, type=int, help="expected status code"
+    )
+
+
 @pytest.fixture(scope='class')
 def triangle():
     return Triangle(14, 13.5, 5)
