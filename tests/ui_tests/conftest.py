@@ -15,7 +15,6 @@ def pytest_addoption(parser):
     )
     parser.addoption(
         "--url", action="store",
-        # default="https://demo.opencart.com/", type=str,
         default="http://demo3x.opencartreports.com/", type=str,
         help="based url"
     )
