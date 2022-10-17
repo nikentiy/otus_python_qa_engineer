@@ -81,16 +81,16 @@ class AdminPage(BasePage):
         self.wait_for_element_visible(self.ADD_BTN)
         self.element(self.ADD_BTN).click()
 
-    def fill_general(self):
+    def fill_general(self, data: str = f'test_{random_string(10)}'):
         self.wait_for_element_visible(self.PRODUCT_NAME_INP)
         self.element(self.PRODUCT_NAME_INP).send_keys(
             f'Best in The Best QA product {random_string(10)}')
-        self.element(self.PRODUCT_NAME_INP).send_keys(f'test_{random_string(10)}')
+        self.element(self.PRODUCT_NAME_INP).send_keys(data)
 
-    def fill_data(self):
+    def fill_data(self, data: str = 'noname'):
         self.element(self.DATA_TAB).click()
         self.wait_for_element_visible(self.MODEL_INP)
-        self.element(self.MODEL_INP).send_keys('noname')
+        self.element(self.MODEL_INP).send_keys(data)
 
     def apply_product(self):
         self.element(self.APPLY_BTN).click()
