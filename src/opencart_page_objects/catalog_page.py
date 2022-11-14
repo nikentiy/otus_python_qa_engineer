@@ -1,3 +1,4 @@
+import allure
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
@@ -15,14 +16,18 @@ class CatalogPage(BasePage):
         self.path = "".join([self.base_path,
                         'index.php?route=product/category&language=en-gb&path=18'])
 
+    @allure.step("Get catalog")
     def catalog(self):
         return self.element(self.CATALOG)
 
+    @allure.step("Check breadcrumb")
     def check_breadcrumb(self):
         self.wait_for_element_visible(self.BREADCRUMB)
 
+    @allure.step("Check compare button")
     def check_compare_btn(self):
         self.wait_for_element_clickable(self.BREADCRUMB)
 
+    @allure.step("Check cameras link")
     def check_cameras_link(self):
         self.wait_for_element_clickable(self.COMPARE_BTN)
