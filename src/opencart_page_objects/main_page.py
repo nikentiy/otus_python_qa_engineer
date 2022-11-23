@@ -1,3 +1,4 @@
+import allure
 from selenium.webdriver.common.by import By
 
 from src.opencart_page_objects.base_page import BasePage
@@ -13,15 +14,19 @@ class MainPage(BasePage):
     EUR = (By.XPATH, '//*[@id="form-currency"]/div/ul/li[1]/button')
     USD = (By.XPATH, '//*[@id="form-currency"]/div/ul/li[3]/button')
 
+    @allure.step("Check logo")
     def check_logo(self):
         self.wait_for_element_visible(self.LOGO)
 
+    @allure.step("Check products carousel")
     def check_products_carousel(self):
         self.wait_for_element_visible(self.PRODUCTS_CAROUSEL)
 
+    @allure.step("Check banner")
     def check_banner(self):
         self.wait_for_element_visible(self.BANNER)
 
+    @allure.step("Set currency")
     def set_currency(self, currency: str):
         self.element(self.CURRENCY_DROPDOWN).click()
         if currency == 'GBP':

@@ -1,5 +1,4 @@
-import random
-import string
+import allure
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -32,72 +31,90 @@ class AdminPage(BasePage):
         super().__init__(driver, base_path)
         self.path = "".join([self.base_path, 'admin'])
 
+    @allure.step("Get login button")
     def login_btn(self):
         return self.element(self.LOGIN_BTN)
 
+    @allure.step("Get username field")
     def username(self):
         return self.element(self.USERMANE)
 
+    @allure.step("Get password field")
     def pwd(self):
         return self.element(self.PWD)
 
+    @allure.step("Check login button")
     def check_login_btn(self):
         self.wait_for_element_clickable(self.LOGIN_BTN)
 
+    @allure.step("Click login button")
     def click_login(self):
         self.login_btn().click()
 
+    @allure.step("Check logo")
     def check_logo(self):
         self.wait_for_element_visible(self.LOGO)
 
+    @allure.step("Check error message")
     def check_error_msg(self, is_present: bool = True):
         if not is_present:
             self.wait_for_element_invisible(self.ERROR_MSG)
         else:
             self.wait_for_element_visible(self.ERROR_MSG)
 
+    @allure.step("Fill username")
     def fill_username(self, username: str):
         self.username().send_keys(username)
 
+    @allure.step("Fill password")
     def fill_password(self, pwd: str):
         self.pwd().send_keys(pwd)
 
+    @allure.step("Close error message")
     def close_error(self):
         self.element(self.CLOSE_ERR_BTN).click()
 
+    @allure.step("Login as admin")
     def login(self):
         self.fill_username('demo')
         self.fill_password('demo')
         self.click_login()
         self.wait_for_element_visible(self.DASHBOARD)
 
+    @allure.step("Open products menu")
     def go_to_products_menu(self):
         self.wait_for_element_visible(self.CATALOG)
         self.element(self.CATALOG).click()
         self.wait_for_element_visible(self.PRODUCTS)
         self.element(self.PRODUCTS).click()
 
+    @allure.step("Click add product button")
     def click_add_btn(self):
         self.wait_for_element_visible(self.ADD_BTN)
         self.element(self.ADD_BTN).click()
 
+    @allure.step("Fill general product info")
     def fill_general(self, data: str = f'test_{random_string(10)}'):
         self.wait_for_element_visible(self.PRODUCT_NAME_INP)
         self.element(self.PRODUCT_NAME_INP).send_keys(
             f'Best in The Best QA product {random_string(10)}')
         self.element(self.PRODUCT_NAME_INP).send_keys(data)
 
+    @allure.step("Fill product data")
     def fill_data(self, data: str = 'noname'):
         self.element(self.DATA_TAB).click()
         self.wait_for_element_visible(self.MODEL_INP)
         self.element(self.MODEL_INP).send_keys(data)
 
+    @allure.step("Apply a product")
     def apply_product(self):
         self.element(self.APPLY_BTN).click()
         self.wait_for_element_visible(self.ALERT)
 
+    @allure.step("Select first product in the list")
     def select_first_product_in_list(self):
         self.element(self.FIRST_PRODUCT_CHBX).click()
 
+    @allure.step("Click delete product button")
     def click_delete_btn(self):
         self.element(self.DELETE_BTN).click()
