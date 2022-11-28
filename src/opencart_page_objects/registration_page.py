@@ -14,7 +14,6 @@ class RegistrationPage(BasePage):
     LAST_NAME_INT = (By.XPATH, '//*[@id="input-lastname"]')
     EMAIL_INT = (By.XPATH, '//*[@id="input-email"]')
     PHONE_INT = (By.XPATH, '//*[@id="input-telephone"]')
-    PHONE_INT = (By.XPATH, '//*[@id="input-telephone"]')
     PWD_INT = (By.XPATH, '//*[@id="input-password"]')
     PWD_C_INT = (By.XPATH, '//*[@id="input-confirm"]')
     CONTINUE_BTN = (By.XPATH, '//*[@id="content"]/form/div/div/input[2]')

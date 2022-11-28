@@ -1,7 +1,8 @@
 import logging
 
+import allure
 from selenium import webdriver
-from selenium.common import NoSuchElementException
+from selenium.common import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -30,43 +31,73 @@ class BasePage:
         try:
             return self.driver.find_element(*locator)
         except NoSuchElementException:
-            AssertionError(f"element '{locator}' has not been found")
+            allure.attach(
+                self.driver.get_screenshot_as_png(),
+                name='not found element',
+                attachment_type=allure.attachment_type.PNG
+            )
+            raise AssertionError(f"element '{locator}' has not been found")
 
     def wait_for_element_visible(self, locator: tuple):
         self.logger.info(f"Waiting for an element visible: {locator}")
         try:
             self.waiter.until(EC.visibility_of_element_located(locator))
-        except TimeoutError:
-            AssertionError(f"element '{locator}' did not appear in time")
+        except TimeoutException:
+            allure.attach(
+                self.driver.get_screenshot_as_png(),
+                name='timeout of element visibility',
+                attachment_type=allure.attachment_type.PNG
+            )
+            raise AssertionError(f"element '{locator}' did not appear in time")
 
     def wait_for_element_invisible(self, locator: tuple):
         self.logger.info(f"Waiting for an element invisible: {locator}")
         try:
             self.waiter.until(EC.invisibility_of_element_located(locator))
-        except TimeoutError:
-            AssertionError(f"element '{locator}' did not disappear in time")
+        except TimeoutException:
+            allure.attach(
+                self.driver.get_screenshot_as_png(),
+                name='timeout of element invisibility',
+                attachment_type=allure.attachment_type.PNG
+            )
+            raise AssertionError(f"element '{locator}' did not disappear in time")
 
     def wait_for_element_clickable(self, locator: tuple):
         self.logger.info(f"Waiting for an element clickable: {locator}")
         try:
             self.waiter.until(EC.element_to_be_clickable(locator))
-        except TimeoutError:
-            AssertionError(f"element '{locator}' is not clickable in time")
+        except TimeoutException:
+            allure.attach(
+                self.driver.get_screenshot_as_png(),
+                name='timeout of element clickability',
+                attachment_type=allure.attachment_type.PNG
+            )
+            raise AssertionError(f"element '{locator}' is not clickable in time")
 
     def wait_for_text_on_element(self, locator: tuple, text: str):
         self.logger.info(f"Waiting for text '{text}' on an element: {locator}")
         try:
             self.waiter.until(EC.text_to_be_present_in_element(locator, text))
-        except TimeoutError:
-            AssertionError(f"text {text} did not appear on element '{locator}' in time")
+        except TimeoutException:
+            allure.attach(
+                self.driver.get_screenshot_as_png(),
+                name='timeout of waiting for test on an element',
+                attachment_type=allure.attachment_type.PNG
+            )
+            raise AssertionError(f"text {text} did not appear on element '{locator}' in time")
 
     def wait_for_element_selection_state(self, locator: tuple, state: bool):
         self.logger.info(f"Waiting for selection state '{state}' of element:{locator}")
         element = self.element(locator)
         try:
             self.waiter.until(EC.element_selection_state_to_be(element, state))
-        except TimeoutError:
-            AssertionError(f"element '{locator}' is not in expected selection: {state}")
+        except TimeoutException:
+            allure.attach(
+                self.driver.get_screenshot_as_png(),
+                name='timeout of an element selection state',
+                attachment_type=allure.attachment_type.PNG
+            )
+            raise AssertionError(f"element '{locator}' is not in expected selection: {state}")
 
     def top(self):
         self.wait_for_element_visible(self.TOP)
