@@ -14,6 +14,14 @@ def pytest_addoption(parser):
         "--browser", action="store", default="chrome", type=str, help="browser name"
     )
     parser.addoption(
+        "--executor", action="store", default="localhost", type=str,
+        help="a way to execute tests"
+    )
+    parser.addoption("--vnc", action="store_true")
+    parser.addoption("--logs", action="store_true")
+    parser.addoption("--videos", action="store_true")
+    parser.addoption("--bv")
+    parser.addoption(
         "--url", action="store",
         default="http://demo3x.opencartreports.com/", type=str,
         help="based url"
@@ -28,19 +36,46 @@ def base_url(request) -> str:
 @pytest.fixture(scope='class')
 def driver(request, base_url) -> webdriver:
     browser = request.config.getoption("--browser")
+    executor = request.config.getoption("--executor")
+    version = request.config.getoption("--bv")
+    vnc = request.config.getoption("--vnc")
+    logs = request.config.getoption("--logs")
+    videos = request.config.getoption("--videos")
 
-    if browser == "chrome":
-        caps = webdriver.DesiredCapabilities.CHROME.copy()
-        caps['acceptInsecureCerts'] = True
-        driver = webdriver.Chrome(desired_capabilities=caps)
-    elif browser == "firefox":
-        profile = webdriver.FirefoxProfile()
-        profile.accept_untrusted_certs = True
-        driver = webdriver.Firefox(firefox_profile=profile)
-    elif browser == "opera":
-        driver = webdriver.Opera()
+    executor_url = f"http://{executor}:4444/wd/hub"
+
+    if executor == "local":
+        if browser == "chrome":
+            caps = webdriver.DesiredCapabilities.CHROME.copy()
+            caps['acceptInsecureCerts'] = True
+            driver = webdriver.Chrome(desired_capabilities=caps)
+        elif browser == "firefox":
+            profile = webdriver.FirefoxProfile()
+            profile.accept_untrusted_certs = True
+            driver = webdriver.Firefox(firefox_profile=profile)
+        elif browser == "opera":
+            driver = webdriver.Opera()
+        else:
+            raise Exception(f"Unsupported browser {browser}")
     else:
-        raise Exception(f"Unsupported browser {browser}")
+        caps = {
+            "browserName": browser,
+            "browserVersion": version,
+            "name": "Nikentiy",
+            "selenoid:options": {
+                "enableVNC": vnc,
+                "enableVideo": videos,
+                "enableLog": logs
+            },
+            'acceptSslCerts': True,
+            'acceptInsecureCerts': True,
+            'timeZone': 'Europe/Moscow',
+            'goog:chromeOptions': {}
+        }
+        driver = webdriver.Remote(
+            command_executor=executor_url,
+            desired_capabilities=caps
+        )
     yield driver
     driver.close()
     driver.quit()
