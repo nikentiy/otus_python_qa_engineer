@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+  tests:
+    container_name: tests
+    build:
+      dockerfile: Dockerfile
+    network_mode: host
+    command: pytest -v tests/ui_tests/test_opencart.py
